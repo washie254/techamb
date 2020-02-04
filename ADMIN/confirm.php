@@ -16,15 +16,15 @@
 ?>
 <!doctype html>
 <html lang="en">
-  <head>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <!-- Required meta tags -->
-  <meta charset="utf-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="megakit,business,company,agency,multipurpose,modern,bootstrap4">
   
   <meta name="author" content="themefisher.com">
 
-  <title>Fortune Admin</title>
+  <title>Kentour Staff</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
   <!-- Icon Font Css -->
@@ -69,7 +69,7 @@
 	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
 		<div class="container">
 		  <a class="navbar-brand" href="#">
-		  	Fortune<span>Health.</span>
+		  	Ken<span>Tour.</span>
 		  </a>
 
 		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,12 +78,10 @@
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
 			<ul class="navbar-nav ml-auto">
-			  	<li class="nav-item active">
-					<a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
-			  	</li>
-			  	<li class="nav-item"><a class="nav-link" href="index.php">Staff</a></li>
-			  	<li class="nav-item"><a class="nav-link" href="incidents.php">Incidents</a></li>
-			   	<li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
+			<li class="nav-item"><a class="nav-link" href="incidents.php"> <== BACK </a></li>
+			  <li class="nav-item active">
+				<a class="nav-link" href="#"> :::::: <span class="sr-only">(current)</span></a>
+			  </li>
 			</ul>
 		  </div>
 		</div>
@@ -95,147 +93,73 @@
 <div class="main-wrapper ">
 
 <section class="section intro">
-
 <div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
-		<h3>QUICK LINKS</h3>
-		<p>some quick links for the page</p> 
-		<p><a href="#activestaff"><button class="btn btn-success">Active Staff</button></a> 
-		<a href="#inactivestaff"><button class="btn btn-success">Inactive Staff</button></a>
-		<a href="#addstaff"><button class="btn btn-success">Add new Staff</button></a>
-		 
-		</p>  
-	</div>
-</div>
-<br>
-<div class="container" id="activestaff">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>Active Staff Members</h3> 
-		<p> the following are the surrently active staff mambers:</p> 
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
-				<th scope="col">Status</th>
-				<th scope="col">Operational Status</th>
-				<th scope="col">Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
+		<h3>Staff guidelines</h3> 
+		<p> provide some directives for your staff</p>  
+        <?php
+            include('connect-db.php');
+           // include('server.php');
+           $db = mysqli_connect('localhost', 'root', '', 'dkut_ambulance');
+            if (isset($_GET['id']) && is_numeric($_GET['id']))
+            {
+                $taskid = $_GET['id'];
+                $insid = $_GET['memb'];
 
-				$sql = "SELECT * FROM staff WHERE status='ACTIVE' AND operationalstatus='AVAILABLE'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td>'.$row[6].'</td> '; //STATUSD
-						echo '<td><a href="deactivate.php?id=' . $row[0] . '"><button class="btn btn-danger">DE-ACTIVATE</button></a> </td>';
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
+                $sql = "SELECT * FROM task WHERE id='$taskid'";
+                $result = mysqli_query($conn, $sql);
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)){
+                    $victim =$row[2];
+                    $directives =$row[4];
+                    $staffremarks = $row[7];
+                    $incid = $row[1];
+                    $stafid = $row[3];
+                }
+            }
+        ?>
+        <p> <b>TASK  ID: </b><?php echo $taskid;?>
+        <p> <b>Victim:</b> <?php echo $victim;?>
+            <br>
+            <b>About:</b><br>
+            <b>Directives:</b> <?=$directives?><br>
+            <b>Staff Remarks</b><?=$staffremarks?>
+        </p>
+        <br>
+
+
+        <div class="container">
+
+            <form method="post" action="confirm.php">
+                <style>
+                    .error {
+                        width: 98%; 
+                        margin: 0px auto; 
+                        padding: 10px; 
+                        border: 1px solid #a94442; 
+                        color: #a94442; 
+                        background: #f2dede; 
+                        border-radius: 5px; 
+                        text-align: left;
+                    }
+                </style>
+                <?php include('errors.php'); ?>
+
+                <div class="form-group">
+                    <textarea type="text" class="form-control" name="patremark" placeholder="Write a remark for the patient" required></textarea>
+                </div>
+
+
+                <input type="text" style="opacity:0;" name="incid" value="<?=$incid?>" readonly>
+                <input type="text" style="opacity:0;" name="taskid" value="<?=$taskid?>" readonly>
+                <input type="text" style="opacity:0;" name="stafid" value="<?=$stafid?>" readonly>
+
+                <button type="submit" class="btn btn-success" name="markcomplete" style="width:100%;"><b>Mark as Complete</b></button>
+                </a>
+
+            </form>
+        </div>
     </div>
 </div>
-
-<br>
-<div class="container" id="inactivestaff">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>INNACTIVE Staff Members</h3> 
-		<p> the following are the surrently Innactive staff mambers:</p> 
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
-				<th scope="col">Status</th>
-				<th scope="col">Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
-
-				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-    </div>
-</div>
-
-<br>
-  <div class="container">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;" id="addstaff">
-        <h3>Assign a New Staff Member</h3> 
-		<p> signup a new staff Member</p>   
-		
-		<form method="post" action="index.php">
-		<style>
-			.error {
-				width: 98%; 
-				margin: 0px auto; 
-				padding: 10px; 
-				border: 1px solid #a94442; 
-				color: #a94442; 
-				background: #f2dede; 
-				border-radius: 5px; 
-				text-align: left;
-			}
-		</style>
-          <?php include('errors.php'); ?>
-       
-		  <div class="form-group">
-              <label for="exampleInputEmail1">Username</label>
-              <input type="text" class="form-control" name="username" placeholder="Enter username" ></textarea>
-		  </div>
-		  <div class="form-group">
-              <label for="exampleInputEmail1">Email</label>
-              <input type="email" class="form-control" name="email" placeholder="Enter Email" ></textarea>
-		  </div>
-		  <div class="form-group">
-              <label for="exampleInputEmail1">password</label>
-              <input type="password" class="form-control" name="password_1" placeholder="Enter password" ></textarea>
-		  </div>
-		  <div class="form-group">
-              <label for="exampleInputEmail1">confirm password</label>
-              <input type="password" class="form-control" name="password_2" placeholder="confirm password" ></textarea>
-		  </div>
-		  <button type="submit" class="btn btn-success" name="add_staff" style="width:100%;"><b>ADD STAFF</b></button>
-
-		</form>
-
-      </div>
-  </div>
 </section>
 
 
@@ -245,6 +169,7 @@
 
 <!-- Section About End -->
 
+<
 
 <!-- footer Start -->
 <footer class="footer section">
@@ -342,5 +267,4 @@
     <script src="js/script.js"></script>
 
   </body>
-  </html>
-   
+</html>

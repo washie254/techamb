@@ -87,7 +87,6 @@
 			  	<li class="nav-item"><a class="nav-link" href="index.php">Staff</a></li>
 			  	<li class="nav-item"><a class="nav-link" href="incidents.php">Incidents</a></li>
 			   	<li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
-			   	<li class="nav-item"><a class="nav-link" href="loans.php">Reports</a></li>
 			</ul>
 		  </div>
 		</div>
@@ -175,31 +174,34 @@
 				<th scope="col">Id</th>
 				<th scope="col">Incident Id</th>
 				<th scope="col">User</th>
-				<th scope="col">Staff Allocated</th>
-				<th scope="col">Staff Directives</th>
+				<th scope="col">Admin Directives</th>
+				<th scope="col">Staff Response</th>
 				<th scope="col">Status</th>
 				<th scope="col">Date Time</th>
+				<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
-				// require('connect-db.php');
+				require('connect-db.php');
                 $user = $_SESSION["username"];
-				$sql = "SELECT * FROM task";
+				$sql = "SELECT * FROM task WHERE status='AWAITING APPROVAL'";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
-				
                     echo '<tr>';
                         //Id	Image	Description	Snake Desciption	Location	Status	Date Time
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //TASK ID
-						echo '<td>'.$row[2].'</td> '; //TASK ID 
-						echo '<td>'.$row[3].'</td> '; //DATEADDED
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[6].'</td> '; //STATUSD
-						echo '<td>'.$row[5].'</td> '; //STATUSD
+						echo '<td>'.$row[0].'</td> '; 
+						echo '<td>'.$row[1].'</td> ';
+						echo '<td>'.$row[2].'</td> ';
+						echo '<td>'.$row[4].'</td> '; 
+						echo '<td>'.$row[7].'</td> '; 
+						echo '<td>'.$row[6].'</td> ';
+						echo '<td>'.$row[5].'</td> ';
+						echo '<td>
+								<a href="confirm.php?id='.$row[0].'&memb='.$row[1].'"><strong><button type="button" class="btn btn-primary">CONFIRM</button></a> 
+							 </td>';
 						
 					echo '</tr>';
 				}
@@ -218,31 +220,37 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
+				<th scope="col">Id</th>
+				<th scope="col">User</th>
+				<th scope="col">Image</th>
+				<th scope="col">Description</th>
+				<th scope="col">Snake Desciption</th>
+				<th scope="col">Location</th>
 				<th scope="col">Status</th>
-				<th scope="col">Action</th>
+				<th scope="col">Date Time</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
 				 require('connect-db.php');
-
-				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM incidents WHERE status='COMPLETED' ";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				
-					echo '<tr>';
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
 						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+						echo '<td>'.$row[1].'</td> '; //TASK ID 
+						echo '<td><img src="'.$picfolder.$row[2].'" style="width:120px;height:80px;"/></td> '; //USERNAME
+						echo '<td>'.$row[3].'<br>'.$row[4].'</td> '; //EMAIL
+						echo '<td>'.$row[5].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'<br>'.$row[9].'</td> '; //STATUSD
+						echo '<td>'.$row[11].'</td> '; //STATUSD
+						echo '<td>'.$row[10].'</td> '; //STATUSD
+						
 					echo '</tr>';
 				}
 				?>

@@ -81,7 +81,6 @@
 			  	<li class="nav-item"><a class="nav-link" href="index.php">Staff</a></li>
 			  	<li class="nav-item"><a class="nav-link" href="incidents.php">Incidents</a></li>
 			   	<li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
-			   	<li class="nav-item"><a class="nav-link" href="loans.php">Reports</a></li>
 			</ul>
 		  </div>
 		</div>

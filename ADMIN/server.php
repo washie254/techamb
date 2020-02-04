@@ -116,7 +116,6 @@
 
 	
 		if (count($errors) == 0) {
-			$password = md5($password_1);//encrypt the password before saving in the database
 			$query = "INSERT INTO task (incid, user, staffid, directives, status) 
 					  VALUES('$incid', '$user', '$staff', '$directives', '$status')";
 			
@@ -135,12 +134,43 @@
 				header('location: incidents.php');
 
 			}
-
-			// $_SESSION['username'] = $username;
-			// $_SESSION['success'] = "You are now logged in";
 		}
 
 	}
+
+	if (isset($_POST['markcomplete'])) {
+		$patremark= mysqli_real_escape_string($db, $_POST['patremark']);
+		$incid= mysqli_real_escape_string($db, $_POST['incid']);
+		$taskid= mysqli_real_escape_string($db, $_POST['taskid']);
+		$stafid= mysqli_real_escape_string($db, $_POST['stafid']);
+		$status = 'COMPLETED';
+
+		if (empty($patremark)) { array_push($errors, "Add some patient remarks"); }
+		if (empty($incid)) { array_push($errors, "could not resolve incident id"); }
+		if (empty($taskid)) { array_push($errors, "could not resolve task id"); }
+
+	
+		if (count($errors) == 0) {
+			$query = "UPDATE task SET status='$status' WHERE id='$taskid'";
+			if(mysqli_query($db, $query)){
+
+				$sql="UPDATE incidents 
+					SET status='$status', adminadvice='$patremark'
+						WHERE id='$incid' ";
+				mysqli_query($db, $sql);
+
+				$sql2="UPDATE staff
+					SET operationalstatus='AVAILABLE'
+						WHERE id='$stafid' ";
+				mysqli_query($db, $sql2);
+
+				header('location: incidents.php');
+
+			}
+		}
+
+	}
+
 
 
 ?>

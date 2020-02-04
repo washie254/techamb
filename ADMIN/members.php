@@ -93,7 +93,6 @@
 			  	<li class="nav-item"><a class="nav-link" href="index.php">Staff</a></li>
 			  	<li class="nav-item"><a class="nav-link" href="incidents.php">Incidents</a></li>
 			   	<li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
-			   	<li class="nav-item"><a class="nav-link" href="loans.php">Reports</a></li>
 			</ul>
 		  </div>
 		</div>
@@ -106,6 +105,17 @@
 
 <section class="section intro">
 <div class="container">
+	<div style="padding: 6px 12px; border: 1px solid #ccc;">
+		<h3>QUICK LINKS</h3>
+		<p>some quick links for the page</p> 
+		<p><a href="#search"><button class="btn btn-success">Search</button></a> 
+		<a href="#users"><button class="btn btn-primary">Registered Users</button></a>
+		<a href="#staff"><button class="btn btn-secondary">Registered Staff</button></a>
+		 
+		</p>  
+	</div>
+</div>
+<div class="container" id="search">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
 		<h3>Admin Dashboard</h3> 
 		<p> Perform a quick search here
@@ -147,7 +157,7 @@
 </div>
 
 <BR>
-<div class="container" id="Active">
+<div class="container" id="users">
     <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
         <h3>ALL REGISTERED USERS</h3> 
 		<p> all the registered and active members</p> 
@@ -188,6 +198,45 @@
     </div>
 </div>	
 <br>
+<div class="container" id="staff">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
+        <h3>All Staff Members</h3> 
+		<p> the following are all the staff members</p> 
+		<table class="table table-striped  table-bordered">
+			<thead>
+				<tr>
+				<th scope="col">Id</th>
+				<th scope="col">Username</th>
+				<th scope="col">email</th>
+				<th scope="col">Date Added</th>
+				<th scope="col">Account Status</th>
+				<th scope="col">Operational Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- [ LOOP THE REGISTERED AGENTS ] -->
+				<?php
+				 require('connect-db.php');
+
+				$sql = "SELECT * FROM staff";
+				$result = mysqli_query($conn, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+				
+					echo '<tr>';
+						echo '<td>'.$row[0].'</td> '; //TASK ID 
+						echo '<td>'.$row[1].'</td> '; //USERNAME
+						echo '<td>'.$row[2].'</td> '; //EMAIL
+						echo '<td>'.$row[4].'</td> '; //TELL
+						echo '<td>'.$row[5].'</td> '; //G1
+						echo '<td>'.$row[6].'</td> '; //G1
+					echo '</tr>';
+				}
+				?>
+			</tbody>
+		</table>
+    </div>
+</div>	
 </section>
 
 

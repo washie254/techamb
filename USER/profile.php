@@ -159,8 +159,70 @@
 <div class="container" id="inactivestaff">
     <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
         <h3>Statistics</h3> 
-		<p> the following are some of your activities statistics log</p> 
-
+		<p> the following are some of your activities statistics log: The following are all 
+		the incidents you have reported </p> 
+		<?php
+			$sql0 = "SELECT * FROM incidents WHERE user='$user'";
+			$result0 = mysqli_query($db, $sql0);
+			$count=0;
+			$solved=0;
+			$pending=0;
+			$ongoing=0;
+			while($rows = mysqli_fetch_array($result0, MYSQLI_NUM))
+			{	$status = $rows[11];
+				$count++;
+				if($status=='COMPLETED'){
+					$solved++;
+				}elseif($status=='PENDING'){
+					$pending++;
+				}elseif($status=='ONGOING'){
+					$ongoing++;
+				}
+			}	
+		?>
+		<P>
+		<div class="alert alert-success" role="alert">
+			<b><u>Total Incidents</u></b> : <?=$count?> &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+			<b><u>Total Pending</u></b> : <?=$pending?> &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;
+			<b><u>Total Solved</u></b> : <?=$solved?> &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;
+			<b><u>Total Ongoing</u></b> : <?=$ongoing?><br>
+		</div>
+		 
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+				<th scope="col">Id</th>
+				<th scope="col">Description</th>
+				<th scope="col">Snake Desciption</th>
+				<th scope="col">Location</th>
+				<th scope="col">Status</th>
+				<th scope="col">Date Time</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- [ LOOP THE REGISTERED AGENTS ] -->
+				<?php
+				 require('connect-db.php');
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM incidents WHERE user='$user'";
+				$result = mysqli_query($conn, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+					
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
+						echo '<td>'.$row[0].'</td> '; //TASK ID //USERNAME
+						echo '<td>'.$row[3].'<br>'.$row[4].'</td> '; //EMAIL
+						echo '<td>'.$row[5].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'<br>'.$row[9].'</td> '; //STATUSD
+						echo '<td>'.$row[11].'</td> '; //STATUSD
+						echo '<td>'.$row[10].'</td> '; //STATUSD
+						
+					echo '</tr>';
+				}
+				?>
+			</tbody>
+		</table>
     </div>
 </div>
 

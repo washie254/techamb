@@ -158,34 +158,38 @@
         <h3>Remarks From the Specialist</h3> 
 		<p> The following are the remarks from the specialist</p> 
 		
-		<table class="table table-bordered">
+		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
+				<th scope="col">Id</th>
+				<th scope="col">Image</th>
+				<th scope="col">Description</th>
+				<th scope="col">Specialists Remarks</th>
+				<th scope="col">Location</th>
 				<th scope="col">Status</th>
-				<th scope="col">Action</th>
+				<th scope="col">Date Time</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
 				 require('connect-db.php');
-
-				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM incidents WHERE user='$user' AND status='COMPLETED'";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				
-					echo '<tr>';
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
 						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+						echo '<td><img src="evidence/'.$row[2].'" style="width:120px;height:80px;"</td> '; //USERNAME
+						echo '<td>'.$row[3].'<br>'.$row[4].'</td> '; //EMAIL
+						echo '<td style="color:blue;">'.$row[12].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'<br>'.$row[9].'</td> '; //STATUSD
+						echo '<td>'.$row[11].'</td> '; //STATUSD
+						echo '<td>'.$row[10].'</td> '; //STATUSD
+						
 					echo '</tr>';
 				}
 				?>
