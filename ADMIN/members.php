@@ -16,10 +16,10 @@
 ?>
 
 <?php
-    $sql = "SELECT * FROM members";
+    $sql = "SELECT * FROM users";
     if( isset($_GET['search']) ){
         $name = mysqli_real_escape_string($db, htmlspecialchars($_GET['search']));
-        $sql = "SELECT * FROM members WHERE username ='$name'";
+        $sql = "SELECT * FROM users WHERE username ='$name'";
     }
     $result = $db->query($sql);
 ?>
@@ -36,7 +36,7 @@
   <title>Kentour Admin</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
-  <!-- Icon Font Css -->a
+  <!-- Icon Font Css -->
   <link rel="stylesheet" href="plugins/themify/css/themify-icons.css">
   <link rel="stylesheet" href="plugins/fontawesome/css/all.css">
   <link rel="stylesheet" href="plugins/magnific-popup/dist/magnific-popup.css">
@@ -68,8 +68,8 @@
 				</div>
 				<div class="col-lg-10 col-md-8 text-center text-lg-right text-md-right">
 					<div class="header-top-info">
-						<a href="tel:+254720870388">Call Us : <span>+254-720-111111</span></a>
-						<a href="mailto:kentour@mail.com" ><i class="fa fa-envelope mr-2"></i><span>kentour@mail.com</span></a>
+						<a href="tel:+254720870388">Call Us : <span>+254-790-108689</span></a>
+						<a href="mailto:Fortune Health@mail.com" ><i class="fa fa-envelope mr-2"></i><span>FortuneHealth@mail.com</span></a>
 					</div>
 				</div>
 			</div>
@@ -78,7 +78,7 @@
 	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
 		<div class="container">
 		  <a class="navbar-brand" href="#">
-		  	Ken<span>Tour.</span>
+		  	Fortune<span>Health.</span>
 		  </a>
 
 		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,14 +87,13 @@
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
 			<ul class="navbar-nav ml-auto">
-			<li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
-			  <li class="nav-item active">
-				<a class="nav-link" href="index.php">Staff <span class="sr-only">(current)</span></a>
-			  </li>
-			  <li class="nav-item"><a class="nav-link" href="lands.php">Lands</a></li>
-			   <li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
-			   <li class="nav-item"><a class="nav-link" href="loans.php">Loans</a></li>
-			   <li class="nav-item"><a class="nav-link" href="landsapp.php">Land Applications</a></li>
+			  	<li class="nav-item active">
+					<a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
+			  	</li>
+			  	<li class="nav-item"><a class="nav-link" href="index.php">Staff</a></li>
+			  	<li class="nav-item"><a class="nav-link" href="incidents.php">Incidents</a></li>
+			   	<li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
+			   	<li class="nav-item"><a class="nav-link" href="loans.php">Reports</a></li>
 			</ul>
 		  </div>
 		</div>
@@ -108,11 +107,8 @@
 <section class="section intro">
 <div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
-		<h3>ADMIN DASHBOARD FOR KENTOUR MEMBERS</h3> 
+		<h3>Admin Dashboard</h3> 
 		<p> Perform a quick search here
-			<a href="#Active"><button type="button" class="btn btn-primary btn-lg">Active</button></a>
-			<a href="#Innactive"><button type="button" class="btn btn-primary btn-lg">Innactive</button></a>
-			<a href="#Rejected"><button type="button" class="btn btn-primary btn-lg">Rejected</button></a>
 		</p>  
         <p>
             <form action=" " method="GET">
@@ -130,7 +126,6 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Telephone</th>
-                    <th>Account Status</th>
                 </tr>
 
             <?php
@@ -140,8 +135,7 @@
                         <td><?php echo $row['id']; ?></td>
                         <td><?php echo $row['username']; ?></td>
                         <td><?php echo $row['email']; ?></td>
-                        <td><?php echo $row['tel']; ?></td>
-                        <td><?php echo $row['accountStatus']; ?></td>
+                        <td><?php echo $row['telno']; ?></td>
                     </tr>
                     <?php
                 }
@@ -155,7 +149,7 @@
 <BR>
 <div class="container" id="Active">
     <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>ALL REGISTERED & ACTIVE MEMBERS</h3> 
+        <h3>ALL REGISTERED USERS</h3> 
 		<p> all the registered and active members</p> 
 		
 		<table class="table table-striped  table-bordered">
@@ -163,9 +157,10 @@
 				<tr>
 				<th scope="col">M.Id</th>
 				<th scope="col">Username</th>
+				<th scope="col">First name</th>
+				<th scope="col">Last name</th>
 				<th scope="col">Email</th>
 				<th scope="col">Tel No</th>
-				<th scope="col">Accnt Status</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -173,7 +168,7 @@
 				<?php
 				 require('connect-db.php');
 
-				$sql = "SELECT * FROM members WHERE accountStatus ='ACTIVE'";
+				$sql = "SELECT * FROM users";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
@@ -183,87 +178,8 @@
 						echo '<td>'.$row[1].'</td> '; //USERNAME
 						echo '<td>'.$row[2].'</td> '; //EMAIL
 						echo '<td>'.$row[3].'</td> '; //TELL
-						echo '<td>'.$row[9].'</td> '; //G1
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-    </div>
-</div>	
-<br>
-
-<div class="container" id="Innactive">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>ALL INNACTIVE MEMBERS</h3> 
-		<p> all the innactive members on the system </p> 
-		
-		<table class="table table-striped  table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">M.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Tel No</th>
-				<th scope="col">Accnt Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
-
-				$sql = "SELECT * FROM members WHERE accountStatus ='INNACTIVE'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[3].'</td> '; //TELL
-						echo '<td>'.$row[9].'</td> '; //G1
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-    </div>
-</div>	
-<br>
-
-<div class="container" id="Rejected">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>ALL REJECTED MEMBERS</h3> 
-		<p> all the rejecte members on the system</p> 
-		
-		<table class="table table-striped  table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">M.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Tel No</th>
-				<th scope="col">Accnt Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
-
-				$sql = "SELECT * FROM members WHERE accountStatus ='REJECTED'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[3].'</td> '; //TELL
-						echo '<td>'.$row[9].'</td> '; //G1
+						echo '<td>'.$row[4].'</td> '; //G1
+						echo '<td>'.$row[6].'</td> '; //G1
 					echo '</tr>';
 				}
 				?>
@@ -281,15 +197,13 @@
 
 <!-- Section About End -->
 
-<
-
 <!-- footer Start -->
 <footer class="footer section">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="widget">
-					<h4 class="text-capitalize mb-4">Kentour Company</h4>
+					<h4 class="text-capitalize mb-4">Fortune Health Company</h4>
 
 					<ul class="list-unstyled footer-menu lh-35">
 						<li><a href="#">Terms & Conditions</a></li>
@@ -312,7 +226,7 @@
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="widget">
 					<h4 class="text-capitalize mb-4">Subscribe Us</h4>
-					<p>Subscribe to the Kentour  </p>
+					<p>Subscribe to the Fortune Health  </p>
 
 					<form action="#" class="sub-form">
 						<input type="text" class="form-control mb-3" placeholder="Subscribe Now ...">
@@ -324,10 +238,10 @@
 			<div class="col-lg-3 ml-auto col-sm-6">
 				<div class="widget">
 					<div class="logo mb-4">
-						<h3>Ken<span>Tour.</span></h3>
+						<h3>Fortune<span>Health.</span></h3>
 					</div>
-					<h6><a href="tel:+254-720-870388" >+254-718-610999</a></h6>
-					<a href="mailto:kentour@yahoo.com"><span class="text-color h4">kentour@yahoo.com</span></a>
+					<h6><a href="tel:+254-790-108689" >+254-790-108689</a></h6>
+					<a href="mailto:Fortune Health@yahoo.com"><span class="text-color h4">Fortunehealth@yahoo.com</span></a>
 				</div>
 			</div>
 		</div>
@@ -336,7 +250,7 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="copyright">
-						&copy; Copyright Reserved to <span class="text-color">Kentour.</span> by <a href="#">Muchemi</a>
+						&copy; Copyright Reserved to <span class="text-color">Fortune Health.</span> by <a href="#">Fortune</a>
 					</div>
 				</div>
 				<div class="col-lg-6 text-left text-lg-right">

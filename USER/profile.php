@@ -209,14 +209,6 @@
   </div> -->
 </section>
 
-
-<!-- Section Intro END -->
-<!-- Section About Start -->
-
-
-<!-- Section About End -->
-
-
 <!-- footer Start -->
 <footer class="footer section">
 	<div class="container">

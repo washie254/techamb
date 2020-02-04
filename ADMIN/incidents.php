@@ -13,6 +13,9 @@
 		header("location: login.php");
 	}
 
+	$pen = 'PENDING';
+	$aloc = 'ALLOCATED';
+	$picfolder ='../USER/evidence/';
 ?>
 <!doctype html>
 <html lang="en">
@@ -116,33 +119,42 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
+				<th scope="col">Id</th>
+				<th scope="col">User</th>
+				<th scope="col">Image</th>
+				<th scope="col">Description</th>
+				<th scope="col">Snake Desciption</th>
+				<th scope="col">Location</th>
 				<th scope="col">Status</th>
-				<th scope="col">Operational Status</th>
-				<th scope="col">Action</th>
+				<th scope="col">Date Time</th>
+				<th scope="col">Action </th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
 				 require('connect-db.php');
-
-				$sql = "SELECT * FROM staff WHERE status='ACTIVE'";
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM incidents WHERE status='$pen' ";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				
-					echo '<tr>';
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
 						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td>'.$row[6].'</td> '; //STATUSD
-						echo '<td><a href="deactivate.php?id=' . $row[0] . '"><button class="btn btn-danger">DE-ACTIVATE</button></a> </td>';
+						echo '<td>'.$row[1].'</td> '; //TASK ID 
+						echo '<td><img src="'.$picfolder.$row[2].'" style="width:120px;height:80px;"/></td> '; //USERNAME
+						echo '<td>'.$row[3].'<br>'.$row[4].'</td> '; //EMAIL
+						echo '<td>'.$row[5].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'<br>'.$row[9].'</td> '; //STATUSD
+						echo '<td>'.$row[11].'</td> '; //STATUSD
+						echo '<td>'.$row[10].'</td> '; //STATUSD
+						echo '<td>
+								<a href="allocatestaff.php?id='.$row[0].'&memb='.$row[1].'"><strong><button type="button" class="btn btn-success">Allocate Staff</button></a> 
+								<a href="advice.php?id='.$row[0].'&memb='.$row[4].'"><strong><button type="button" class="btn btn-primary">Provide Advice</button></a>
+							 </td>';
+						
 					echo '</tr>';
 				}
 				?>
@@ -160,31 +172,35 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
+				<th scope="col">Id</th>
+				<th scope="col">Incident Id</th>
+				<th scope="col">User</th>
+				<th scope="col">Staff Allocated</th>
+				<th scope="col">Staff Directives</th>
 				<th scope="col">Status</th>
-				<th scope="col">Action</th>
+				<th scope="col">Date Time</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
-				 require('connect-db.php');
-
-				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
+				// require('connect-db.php');
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM task";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				
-					echo '<tr>';
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
 						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
+						echo '<td>'.$row[1].'</td> '; //TASK ID
+						echo '<td>'.$row[2].'</td> '; //TASK ID 
+						echo '<td>'.$row[3].'</td> '; //DATEADDED
 						echo '<td>'.$row[4].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'</td> '; //STATUSD
 						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+						
 					echo '</tr>';
 				}
 				?>
@@ -236,14 +252,6 @@
   </div>
 </section>
 
-
-<!-- Section Intro END -->
-<!-- Section About Start -->
-
-
-<!-- Section About End -->
-
-
 <!-- footer Start -->
 <footer class="footer section">
 	<div class="container">
@@ -285,7 +293,7 @@
 			<div class="col-lg-3 ml-auto col-sm-6">
 				<div class="widget">
 					<div class="logo mb-4">
-						<h3>Ken<span>Tour.</span></h3>
+						<h3>Fortune<span>Health.</span></h3>
 					</div>
 					<h6><a href="tel:+254-790-108689" >+254-790-108689</a></h6>
 					<a href="mailto:Fortune Health@yahoo.com"><span class="text-color h4">Fortunehealth@yahoo.com</span></a>

@@ -48,16 +48,12 @@
 		$username = mysqli_real_escape_string($db, $_POST['username']);
 		$password = mysqli_real_escape_string($db, $_POST['password']);
 
-		if (empty($username)) {
-			array_push($errors, "Username is required");
-		}
-		if (empty($password)) {
-			array_push($errors, "Password is required");
-		}
+		if (empty($username)) { array_push($errors, "Username is required"); }
+		if (empty($password)) { array_push($errors, "Password is required"); }
 
 		if (count($errors) == 0) {
 			$password = md5($password);
-			$query = "SELECT * FROM admins WHERE username='$username' AND password='$password'";
+			$query = "SELECT * FROM admin WHERE username='$username' AND password='$password'";
 			$results = mysqli_query($db, $query);
 
 			if (mysqli_num_rows($results) == 1) {
@@ -100,6 +96,48 @@
 			// $_SESSION['username'] = $username;
 			// $_SESSION['success'] = "You are now logged in";
 			header('location: index.php');
+		}
+
+	}
+
+	//ALOCATE STAFF 
+	
+	if (isset($_POST['allocatestaff'])) {
+		$staff = mysqli_real_escape_string($db, $_POST['staff']);
+		$user = mysqli_real_escape_string($db, $_POST['user']);
+		$incid = mysqli_real_escape_string($db, $_POST['incid']);
+		$directives = mysqli_real_escape_string($db, $_POST['directives']);
+		$status = 'PENDING';
+
+		if (empty($incid)) { array_push($errors, "could not resolve incident"); }
+		if (empty($user)) { array_push($errors, "could not resolve user"); }
+		if (empty($directives)) { array_push($errors, "Kindly provide directives"); }
+		if (empty($staff)) { array_push($errors, "Could Not resolve staff"); }
+
+	
+		if (count($errors) == 0) {
+			$password = md5($password_1);//encrypt the password before saving in the database
+			$query = "INSERT INTO task (incid, user, staffid, directives, status) 
+					  VALUES('$incid', '$user', '$staff', '$directives', '$status')";
+			
+			if(mysqli_query($db, $query)){
+
+				$sql="UPDATE staff 
+					SET operationalstatus='OCCUPIED'
+						WHERE id='$staff' ";
+				mysqli_query($db, $sql);
+
+				$sql2="UPDATE incidents
+					SET status='ONGOING'
+						WHERE id='$incid' ";
+				mysqli_query($db, $sql2);
+
+				header('location: incidents.php');
+
+			}
+
+			// $_SESSION['username'] = $username;
+			// $_SESSION['success'] = "You are now logged in";
 		}
 
 	}

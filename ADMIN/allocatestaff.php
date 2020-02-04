@@ -24,7 +24,7 @@
   
   <meta name="author" content="themefisher.com">
 
-  <title>Kentour Admin</title>
+  <title>Kentour Staff</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
   <!-- Icon Font Css -->
@@ -59,8 +59,8 @@
 				</div>
 				<div class="col-lg-10 col-md-8 text-center text-lg-right text-md-right">
 					<div class="header-top-info">
-						<a href="tel:+254720870388">Call Us : <span>+254-720-111111</span></a>
-						<a href="mailto:kentour@mail.com" ><i class="fa fa-envelope mr-2"></i><span>kentour@mail.com</span></a>
+						<a href="tel:+254720870388">Call Us : <span>+254-790-108689</span></a>
+						<a href="mailto:Fortune Health@mail.com" ><i class="fa fa-envelope mr-2"></i><span>FortuneHealth@mail.com</span></a>
 					</div>
 				</div>
 			</div>
@@ -78,14 +78,10 @@
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
 			<ul class="navbar-nav ml-auto">
-			<li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
+			<li class="nav-item"><a class="nav-link" href="incidents.php"> <== BACK </a></li>
 			  <li class="nav-item active">
-				<a class="nav-link" href="index.php">Staff <span class="sr-only">(current)</span></a>
+				<a class="nav-link" href="#"> :::::: <span class="sr-only">(current)</span></a>
 			  </li>
-			  <li class="nav-item"><a class="nav-link" href="lands.php">Lands</a></li>
-			   <li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
-			   <li class="nav-item"><a class="nav-link" href="loans.php">Loans</a></li>
-			   <li class="nav-item"><a class="nav-link" href="landsapp.php">Land Applications</a></li>
 			</ul>
 		  </div>
 		</div>
@@ -99,150 +95,92 @@
 <section class="section intro">
 <div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
-		<h3>ADMIN DASHBOARD FOR KENTOUR LOANS</h3> 
-		<p> Quick Links:
-            <a href="#approved"><button type="button" class="btn btn-primary">Approved</button></a>
-            <a href="#pending"><button type="button" class="btn btn-primary">Pending</button></a>
-            <a href="#rejected"><button type="button" class="btn btn-primary">Rejected</button></a><br>
-             download the loans report ? 
-             <a href="../STAFF/pdf/loans.php" target='0'><button class="btn btn-secondary"><i class="fa fa-download"></i> Download</button></a>
-            </p>  
-	</div>
-</div>
+		<h3>Staff guidelines</h3> 
+		<p> provide some directives for your staff</p>  
+        <?php
+            include('connect-db.php');
+           // include('server.php');
+           $db = mysqli_connect('localhost', 'root', '', 'dkut_ambulance');
+            if (isset($_GET['id']) && is_numeric($_GET['id']))
+            {
+                $incid = $_GET['id'];
+                $userid = $_GET['memb'];
+                $stat ="REJECTED";
 
-<br>
-<div class="container" id="approved">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>APPROVED CASHLOANS</h3> 
-		<p> the following are the approved loans</p> 
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">l.Id</th>
-				<th scope="col">Mem ID</th>
-				<th scope="col">Mem Username</th>
-				<th scope="col">Amount</th>
-				<th scope="col">Date & Time Applied</th>
-				<th scope="col">Purpose</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
+                $sql = "SELECT * FROM incidents WHERE id='$incid'";
+                $result = mysqli_query($conn, $sql);
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)){
+                    $uid =$row[0];
+                    $uname =$row[1];
+                    $title = $row[3];
+                    $description = $row[4]. "<br> Location<br>".$row[9];
+                }
+            }
+        ?>
+        <p> <b>INSC  ID: </b><?php echo $incid;?>
+        <p> <b>USERNAME:</b> <?php echo $uname;?>
+            <br>
+            <b>About:</b><br>
+            <b><?=$title?></b><br>
+            <?=$description?>
+        </p>
+        <br>
 
-				$sql = "SELECT * FROM cashloans WHERE status='APPROVED'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; // l ID 
-						echo '<td>'.$row[5].'</td> '; //MEM ID
-						echo '<td>'.$row[6].'</td> '; //MEM USERNAME
-						echo '<td>'.$row[1].'</td> '; //Amount
-						echo '<td>'.$row[2].' @ '.$row[3].'</td> '; //DATE APPLIED
-						echo '<td>'.$row[7].'</td> '; //Purpose
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
+
+        <div class="container">
+
+            <form method="post" action="allocatestaff.php">
+                <style>
+                    .error {
+                        width: 98%; 
+                        margin: 0px auto; 
+                        padding: 10px; 
+                        border: 1px solid #a94442; 
+                        color: #a94442; 
+                        background: #f2dede; 
+                        border-radius: 5px; 
+                        text-align: left;
+                    }
+                </style>
+                <?php include('errors.php'); ?>
+            
+                <div class="form-group">
+                    <label for="selectdistributor">Select Staff</label>
+                    <?php                 
+                        $query = "SELECT id, username  FROM staff WHERE status='ACTIVE' AND operationalstatus='AVAILABLE'";
+                        $result = mysqli_query($db, $query);
+                        echo "<select class='form-control' name='staff'>";
+                            if (mysqli_num_rows($result) > 0) { 
+                                while ($row = $result->fetch_assoc()) {
+                                    unset($id, $name);
+                                    $id = $row['id'];
+                                    $username = $row['username'];
+                                    echo '<option value="'.$id.'">'.$username.'</option>'; 
+                                }  
+
+                            }
+                            else{
+                                echo '<option value="'.$id.'">No staff available</option>';      
+                            }
+                        echo "</select>";
+                    ?>
+                </div>
+
+                <div class="form-group">
+                    <textarea type="text" class="form-control" name="directives" placeholder="Write a directive for the staff personnel to follow along" ></textarea>
+                </div>
+
+
+                <input type="text" style="opacity:0.5;" name="incid" value="<?=$incid?>" readonly>
+                <input type="text" style="opacity:0.5;" name="user" value="<?=$uname?>" readonly>
+
+                <button type="submit" class="btn btn-success" name="allocatestaff" style="width:100%;"><b>Allocate Task</b></button>
+                </a>
+
+            </form>
+        </div>
     </div>
 </div>
-
-<br>
-<div class="container" id="pending">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>PENDING CASHLOANS</h3> 
-		<p> the following are the pending cash loans</p> 
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">l.Id</th>
-				<th scope="col">Mem ID</th>
-				<th scope="col">Mem Username</th>
-				<th scope="col">Amount</th>
-				<th scope="col">Date & Time Applied</th>
-				<th scope="col">Purpose</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
-
-				$sql = "SELECT * FROM cashloans WHERE status='PENDING'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; // l ID 
-						echo '<td>'.$row[5].'</td> '; //MEM ID
-						echo '<td>'.$row[6].'</td> '; //MEM USERNAME
-						echo '<td>'.$row[1].'</td> '; //Amount
-						echo '<td>'.$row[2].' @ '.$row[3].'</td> '; //DATE APPLIED
-						echo '<td>'.$row[7].'</td> '; //Purpose
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-    </div>
-</div>
-
-<br>
-<div class="container" id="rejected">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>REJECTED CASHLOANS</h3> 
-		<p> the following are the rejected cash loans</p> 
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">l.Id</th>
-				<th scope="col">Mem ID</th>
-				<th scope="col">Mem Username</th>
-				<th scope="col">Amount</th>
-				<th scope="col">Date & Time Applied</th>
-				<th scope="col">Purpose</th>
-				<th scope="col">Reason</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
-
-				$sql = "SELECT * FROM cashloans WHERE status='REJECTED'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-					$lid = $row[0];
-					$sql2 ="SELECT * FROM rejectedloanreasons WHERE loanid='$lid' LIMIT 1";
-					$res= mysqli_query($conn, $sql2);
-					while($rows = mysqli_fetch_array($res, MYSQLI_NUM)){
-						$reason = $rows[3];
-					}
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; // l ID 
-						echo '<td>'.$row[5].'</td> '; //MEM ID
-						echo '<td>'.$row[6].'</td> '; //MEM USERNAME
-						echo '<td>'.$row[1].'</td> '; //Amount
-						echo '<td>'.$row[2].' @ '.$row[3].'</td> '; //DATE APPLIED
-						echo '<td>'.$row[7].'</td> '; //Purpose
-						echo '<td>'.$reason.'</td> '; //Purpose
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-    </div>
-</div>
-
 </section>
 
 
@@ -260,7 +198,7 @@
 		<div class="row">
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="widget">
-					<h4 class="text-capitalize mb-4">Kentour Company</h4>
+					<h4 class="text-capitalize mb-4">Fortune Health Company</h4>
 
 					<ul class="list-unstyled footer-menu lh-35">
 						<li><a href="#">Terms & Conditions</a></li>
@@ -276,14 +214,14 @@
 
 					<ul class="list-unstyled footer-menu lh-35">
 						<li><a href="index.php">Home</a></li>
-						<li><a href="staff.php">Staff</a></li>
+						<li><a href="index.php">Staff</a></li>
 					</ul>
 				</div>
 			</div>
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="widget">
 					<h4 class="text-capitalize mb-4">Subscribe Us</h4>
-					<p>Subscribe to the Kentour  </p>
+					<p>Subscribe to the Fortune Health  </p>
 
 					<form action="#" class="sub-form">
 						<input type="text" class="form-control mb-3" placeholder="Subscribe Now ...">
@@ -297,8 +235,8 @@
 					<div class="logo mb-4">
 						<h3>Ken<span>Tour.</span></h3>
 					</div>
-					<h6><a href="tel:+254-720-870388" >+254-718-610999</a></h6>
-					<a href="mailto:kentour@yahoo.com"><span class="text-color h4">kentour@yahoo.com</span></a>
+					<h6><a href="tel:+254-790-108689" >+254-790-108689</a></h6>
+					<a href="mailto:Fortune Health@yahoo.com"><span class="text-color h4">Fortunehealth@yahoo.com</span></a>
 				</div>
 			</div>
 		</div>
@@ -307,7 +245,7 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="copyright">
-						&copy; Copyright Reserved to <span class="text-color">Kentour.</span> by <a href="#">Muchemi</a>
+						&copy; Copyright Reserved to <span class="text-color">Fortune Health.</span> by <a href="#">Fortune</a>
 					</div>
 				</div>
 				<div class="col-lg-6 text-left text-lg-right">
@@ -350,5 +288,4 @@
     <script src="js/script.js"></script>
 
   </body>
-  </html>
-   
+</html>

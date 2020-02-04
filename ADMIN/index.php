@@ -269,7 +269,7 @@
 
 					<ul class="list-unstyled footer-menu lh-35">
 						<li><a href="index.php">Home</a></li>
-						<li><a href="staff.php">Staff</a></li>
+						<li><a href="index.php">Staff</a></li>
 					</ul>
 				</div>
 			</div>
