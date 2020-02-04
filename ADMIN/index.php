@@ -122,6 +122,7 @@
 				<th scope="col">Email</th>
 				<th scope="col">Date Added</th>
 				<th scope="col">Status</th>
+				<th scope="col">Operational Status</th>
 				<th scope="col">Action</th>
 				</tr>
 			</thead>
@@ -141,6 +142,7 @@
 						echo '<td>'.$row[2].'</td> '; //EMAIL
 						echo '<td>'.$row[4].'</td> '; //DATEADDED
 						echo '<td>'.$row[5].'</td> '; //STATUSD
+						echo '<td>'.$row[6].'</td> '; //STATUSD
 						echo '<td><a href="deactivate.php?id=' . $row[0] . '"><button class="btn btn-danger">DE-ACTIVATE</button></a> </td>';
 					echo '</tr>';
 				}
