@@ -108,9 +108,13 @@
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
 		<h3>QUICK LINKS</h3>
 		<p>some quick links for the page</p> 
+		
 		<p><a href="#search"><button class="btn btn-success">Search</button></a> 
 		<a href="#users"><button class="btn btn-primary">Registered Users</button></a>
 		<a href="#staff"><button class="btn btn-secondary">Registered Staff</button></a>
+		<a href="pdf/pdf.php" target="0">
+			<button class="btn btn-primary"><i class="fa fa-download"></i>Download General report</button>
+		</a>
 		 
 		</p>  
 	</div>

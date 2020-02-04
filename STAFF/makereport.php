@@ -18,7 +18,13 @@
 <html lang="en">
   <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <!-- Required meta tags -->
-  
+  	<style>
+       /* Set the size of the div element that contains the map */
+		#map {
+		height: 350px;  /* The height is 400 pixels */
+		width: 100%;  /* The width is the width of the web page */
+		}
+	</style>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="megakit,business,company,agency,multipurpose,modern,bootstrap4">
   
@@ -95,9 +101,9 @@
 <section class="section intro">
 <div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
-		<h3>Staff guidelines</h3> 
-		<p> provide some directives for your staff</p>  
-        <?php
+		<h3>Incident Higlights</h3> 
+		<p> The Following are the higlights about the incident</p>  
+		<?php
             include('connect-db.php');
            // include('server.php');
            $db = mysqli_connect('localhost', 'root', '', 'dkut_ambulance');
@@ -106,17 +112,40 @@
                 $taskid = $_GET['id'];
                 $incid = $_GET['memb'];
                 // $stat ="ATTENDED";
-
+				$sq= "SELECT *FROM incidents WHERE id='$incid'";
+				$rez = mysqli_query($conn,$sq);
+				while($roz = mysqli_fetch_array($rez, MYSQLI_NUM)){
+					$lat = $roz[7];
+					$lng = $roz[8];
+				}
                 $sql = "SELECT * FROM task WHERE id='$taskid'";
                 $result = mysqli_query($conn, $sql);
                 while($row = mysqli_fetch_array($result, MYSQLI_NUM)){
-                    // $i =$row[0];
                     $victim =$row[2];
                     $directives = $row[4];
                     $datetim = $row[5];
                 }
             }
         ?>
+		<b>Lat:<?=$lat?> &nbsp;&nbsp;|&nbsp;&nbsp; Lng:<?=$lng?></b>
+		<div id="map"></div>
+		<script>
+			function initMap() { 
+				var test= {lat: -1.2841, lng: 36.8155}; 
+				var map = new google.maps.Map(document.getElementById('map'), { 
+				zoom: 4, 
+				center: test 
+				}); 
+				var marker = new google.maps.Marker({ 
+				position: test, 
+				map: map 
+				}); 
+			} 
+		</script>
+		<script async defer
+    		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2yA5YuLgx_YR4klxs93zoS9Ez7onQF6k&callback=initMap">
+    	</script>
+        
         <p> <b>Task  ID: </b><?php echo $taskid;?>
         <p> <b>VICTIM :</b> <?php echo $victim;?>
             <br>
