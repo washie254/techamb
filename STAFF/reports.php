@@ -16,6 +16,13 @@
 	$pen = 'PENDING';
 	$aloc = 'ALLOCATED';
 	$picfolder ='../USER/evidence/';
+
+	$staf = $_SESSION["username"];
+	$sq = "SELECT *FROM staff WHERE username='$staf'";
+	$res = mysqli_query($db, $sq);
+	while($roz = mysqli_fetch_array($res, MYSQLI_NUM)){
+		$stafid = $roz[0];
+	}
 ?>
 <!doctype html>
 <html lang="en">
@@ -101,72 +108,62 @@
 
 <div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
-		<h3>QUICK LINKS</h3>
-		<p>categories of the reported incidednts of snake bites</p> 
-		<p> <a href="#pending"><button class="btn btn-success">Pending Incidents</button></a> 
-            <a href="#ongoing"><button class="btn btn-success">Allocated incidents</button></a>
-            <a href="#completed"><button class="btn btn-success">Completed Iincidents</button></a>
-		</p>  
+		<h3>Account Profile</h3>
+		<p>the following are the details available about this accoutn</p> 
+		<table class="table table-stripped">
+			<thead>
+				<tr>
+					<th sope="col">Avatar</th>
+					<th scope="col">Personal</th>
+					<th scope="col">About Salon</th>
+				</tr>
+			</thead>
+			<?php
+				$user = $_SESSION['username'];
+;               $query2 = "SELECT * FROM staff WHERE username='$user'";
+				$result2 = mysqli_query($db, $query2);
+				while($row = mysqli_fetch_array($result2, MYSQLI_NUM)){
+					$uid = $row[0];
+					$username = $row[1];
+					$email = $row[4];
+					$datecreated = $row[4];
+					$acntstat = $row[5];
+					$operationalstat = $row[6];
+
+				}
+			
+			?>
+			<tr> <td>::<b style="color: #58BA2B;"> PROFILE INFORMATION</b></td> </tr>
+			<tr>
+				<td>
+					<?php 
+						echo '<img src="images/avatar.png" style="width:150px; height:150px;">';
+					?>
+
+				</td>
+				<td>
+					<label class="label">User Id:</label><?php echo $uid; ?><br>
+					<label class="label">Username :</label> <?php echo $username; ?><br>
+					<label class="label">Email:</label> <?php echo $email; ?><br>
+				</td>
+				<td>
+					<label class="label">Date Added:</label><?php echo $datecreated; ?><br>
+					<label class="label">Acnt Sta:</label><?php echo $acntstat; ?><br>
+					<label class="label">Operational Stat:</label><?php echo $operationalstat; ?><br>
+				
+				</td>
+			</tr>
+		</table>
 	</div>
 </div>
 <br>
-<div class="container" id="pending">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>Pending Incidents</h3> 
-		<p> the following are the pending reported incidents </p> 
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">Id</th>
-				<th scope="col">User</th>
-				<th scope="col">Image</th>
-				<th scope="col">Description</th>
-				<th scope="col">Snake Desciption</th>
-				<th scope="col">Location</th>
-				<th scope="col">Status</th>
-				<th scope="col">Date Time</th>
-				<th scope="col">Action </th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
-                $user = $_SESSION["username"];
-				$sql = "SELECT * FROM incidents WHERE status='$pen' ";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-                    echo '<tr>';
-                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //TASK ID 
-						echo '<td><img src="'.$picfolder.$row[2].'" style="width:120px;height:80px;"/></td> '; //USERNAME
-						echo '<td>'.$row[3].'<br>'.$row[4].'</td> '; //EMAIL
-						echo '<td>'.$row[5].'</td> '; //DATEADDED
-						echo '<td>'.$row[6].'<br>'.$row[9].'</td> '; //STATUSD
-						echo '<td>'.$row[11].'</td> '; //STATUSD
-						echo '<td>'.$row[10].'</td> '; //STATUSD
-						echo '<td>
-								<a href="allocatestaff.php?id='.$row[0].'&memb='.$row[1].'"><strong><button type="button" class="btn btn-success">Allocate Staff</button></a> 
-								<a href="advice.php?id='.$row[0].'&memb='.$row[4].'"><strong><button type="button" class="btn btn-primary">Provide Advice</button></a>
-							 </td>';
-						
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-    </div>
-</div>
+
 
 <br>
 <div class="container" id="ongoing">
     <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>Allocated incidents</h3> 
-		<p> the following are incidents allocated to staff and their progress status </p> 
+        <h3>Incidents Awaiting Approval</h3> 
+		<p> the following are the incidents that awaiing admins approval </p> 
 		
 		<table class="table table-bordered">
 			<thead>
@@ -174,8 +171,8 @@
 				<th scope="col">Id</th>
 				<th scope="col">Incident Id</th>
 				<th scope="col">User</th>
-				<th scope="col">Staff Allocated</th>
-				<th scope="col">Staff Directives</th>
+				<th scope="col">Admin Directives</th>
+				<th scope="col">Your Responce</th>
 				<th scope="col">Status</th>
 				<th scope="col">Date Time</th>
 				</tr>
@@ -183,9 +180,9 @@
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
-				// require('connect-db.php');
+				require('connect-db.php');
                 $user = $_SESSION["username"];
-				$sql = "SELECT * FROM task";
+				$sql = "SELECT * FROM task WHERE status='AWAITING APPROVAL' AND staffid='$stafid'";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
@@ -195,8 +192,8 @@
 						echo '<td>'.$row[0].'</td> '; //TASK ID 
 						echo '<td>'.$row[1].'</td> '; //TASK ID
 						echo '<td>'.$row[2].'</td> '; //TASK ID 
-						echo '<td>'.$row[3].'</td> '; //DATEADDED
 						echo '<td>'.$row[4].'</td> '; //DATEADDED
+						echo '<td>'.$row[7].'</td> '; //DATEADDED
 						echo '<td>'.$row[6].'</td> '; //STATUSD
 						echo '<td>'.$row[5].'</td> '; //STATUSD
 						
@@ -212,36 +209,40 @@
   <div class="container">
     <div style="padding: 6px 12px; border: 1px solid #ccc;" id="completed">
         <h3>Completed Incidents</h3> 
-		<p> the following are the completed incidents </p>   
+		<p> the following are the incidents completed and marked as complete by the admin </p>   
 		
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
+				<th scope="col">Id</th>
+				<th scope="col">Incident Id</th>
+				<th scope="col">User</th>
+				<th scope="col">Admin Directives</th>
+				<th scope="col">Your Responce</th>
 				<th scope="col">Status</th>
-				<th scope="col">Action</th>
+				<th scope="col">Date Time</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
-				 require('connect-db.php');
-
-				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
+				require('connect-db.php');
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM task WHERE status='COMPLETED' AND staffid='$stafid'";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				
-					echo '<tr>';
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
 						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
+						echo '<td>'.$row[1].'</td> '; //TASK ID
+						echo '<td>'.$row[2].'</td> '; //TASK ID 
 						echo '<td>'.$row[4].'</td> '; //DATEADDED
+						echo '<td>'.$row[7].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'</td> '; //STATUSD
 						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+						
 					echo '</tr>';
 				}
 				?>

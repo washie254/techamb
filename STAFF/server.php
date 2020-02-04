@@ -33,4 +33,27 @@
 		}
 	}
 
+	//STAFF MAKING A REPORTING 
+	if (isset($_POST['makereport'])) {
+		$taskid = mysqli_real_escape_string($db, $_POST['taskid']);
+		$remarks = mysqli_real_escape_string($db, $_POST['remarks']);
+		$status = 'AWAITING APPROVAL';
+		if (empty($remarks)) { array_push($errors, "Kindly provide some remarks"); }
+		if (empty($taskid)) { array_push($errors, "Could Not resolve your Task ID"); }
+
+		if (count($errors) == 0) {
+			
+			$query = "UPDATE task 
+						SET
+					    status='$status',
+						staffremarks='$remarks' 
+						WHERE id='$taskid' ";
+			if(mysqli_query($db, $query)){
+				header('location: incidents.php');
+			}
+
+			
+		}
+	}
+
 ?>

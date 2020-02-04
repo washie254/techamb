@@ -12,6 +12,16 @@
 		unset($_SESSION['username']);
 		header("location: login.php");
 	}
+	$pen = 'PENDING';
+	$aloc = 'ALLOCATED';
+	$picfolder ='../USER/evidence/';
+
+	$staf = $_SESSION["username"];
+	$sq = "SELECT *FROM staff WHERE username='$staf'";
+	$res = mysqli_query($db, $sq);
+	while($roz = mysqli_fetch_array($res, MYSQLI_NUM)){
+		$stafid = $roz[0];
+	}
 
 ?>
 <!doctype html>
@@ -24,7 +34,7 @@
   
   <meta name="author" content="themefisher.com">
 
-  <title>Fortune Admin</title>
+  <title>Fortune Staff</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
   <!-- Icon Font Css -->
@@ -100,9 +110,7 @@
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
 		<h3>QUICK LINKS</h3>
 		<p>some quick links for the page</p> 
-		<p><a href="#activestaff"><button class="btn btn-success">Active Staff</button></a> 
-		<a href="#inactivestaff"><button class="btn btn-success">Inactive Staff</button></a>
-		<a href="#addstaff"><button class="btn btn-success">Add new Staff</button></a>
+		<p><a href="#activestaff"><button class="btn btn-success">Pending Tasks</button></a> 
 		 
 		</p>  
 	</div>
@@ -110,40 +118,58 @@
 <br>
 <div class="container" id="activestaff">
     <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>Active Staff Members</h3> 
-		<p> the following are the surrently active staff mambers:</p> 
+        <h3>Pending Allocated Tasks</h3> 
+		<p>The following are the allocated tasks at the moment by the admin. 
+		attend to them as soon as possible and only file report once you reach the scene or get back
+		at the medical facility with the patient if patient aint treated onsite</p> 
 		
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
-				<th scope="col">Status</th>
-				<th scope="col">Operational Status</th>
-				<th scope="col">Action</th>
+				<th scope="col">Id</th>
+				<th scope="col">Incident ID</th>
+				<th scope="col">User</th>
+				<th scope="col">Image</th>
+				<th scope="col">Description</th>
+				<th scope="col">Location</th>
+				<th scope="col">Directives</th>
+				<th scope="col">Date Time</th>
+				<th scope="col">Action </th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
 				 require('connect-db.php');
-
-				$sql = "SELECT * FROM staff WHERE status='ACTIVE'";
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM task WHERE staffid='$stafid' AND status='PENDING'";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td>'.$row[6].'</td> '; //STATUSD
-						echo '<td><a href="deactivate.php?id=' . $row[0] . '"><button class="btn btn-danger">DE-ACTIVATE</button></a> </td>';
-					echo '</tr>';
+					$incid = $row[1];
+					$sqq = "SELECT * FROM  incidents WHERE id='$incid'";
+					$ress = mysqli_query($conn, $sqq);
+					while($roww = mysqli_fetch_array($ress, MYSQLI_NUM)){
+						$image = $roww[2];
+						$description = $roww[3]."<br><b><u>Wound Descriprion:</u></b><br>".$roww[4];
+						$location = $roww[6]."<br><b>Coords:</b><br>".$roww[9];
+						echo '<tr>';
+							//Id	Image	Description	Snake Desciption	Location	Status	Date Time
+							echo '<td>'.$row[0].'</td> '; //TASK ID 
+							echo '<td>'.$incid.'</td> '; //TASK ID 
+							echo '<td>'.$row[2].'</td> '; //USER
+							echo '<td><img src="'.$picfolder.$image.'" style="width:120px;height:80px;"/></td> '; //USERNAME
+							echo '<td>'.$description.'</td> '; //EMAIL
+							echo '<td>'.$location.'</td> '; //DATEADDED
+							echo '<td>'.$row[4].'</td> '; //STATUSD
+							echo '<td>'.$row[5].'</td> '; //STATUSD
+							echo '<td>
+									<a href="makereport.php?id='.$row[0].'&memb='.$incid.'"><strong><button type="button" class="btn btn-primary">Complete Task</button></a> 
+								</td>';
+							
+						echo '</tr>';
+					}
+
 				}
 				?>
 			</tbody>
@@ -152,49 +178,10 @@
 </div>
 
 <br>
-<div class="container" id="inactivestaff">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>INNACTIVE Staff Members</h3> 
-		<p> the following are the surrently Innactive staff mambers:</p> 
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
-				<th scope="col">Status</th>
-				<th scope="col">Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
 
-				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-    </div>
-</div>
 
 <br>
-  <div class="container">
+  <!-- <div class="container">
     <div style="padding: 6px 12px; border: 1px solid #ccc;" id="addstaff">
         <h3>Assign a New Staff Member</h3> 
 		<p> signup a new staff Member</p>   
@@ -235,7 +222,7 @@
 		</form>
 
       </div>
-  </div>
+  </div> -->
 </section>
 
 
@@ -267,8 +254,8 @@
 					<h4 class="text-capitalize mb-4">Quick Links</h4>
 
 					<ul class="list-unstyled footer-menu lh-35">
-						<li><a href="index.php">Home</a></li>
-						<li><a href="index.php">Staff</a></li>
+						<li><a href="home.php">Home</a></li>
+						<li><a href="index.php">Incidents</a></li>
 					</ul>
 				</div>
 			</div>

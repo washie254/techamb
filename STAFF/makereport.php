@@ -1,6 +1,7 @@
 <?php include('server.php');?>
 <?php 
 	//session_start(); 
+
 	if (!isset($_SESSION['username'])) {
 		$_SESSION['msg'] = "You must log in first";
 		header('location: login.php');
@@ -15,15 +16,15 @@
 ?>
 <!doctype html>
 <html lang="en">
-  <head>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <!-- Required meta tags -->
-  <meta charset="utf-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="megakit,business,company,agency,multipurpose,modern,bootstrap4">
   
   <meta name="author" content="themefisher.com">
 
-  <title>Fortune Health STAFF</title>
+  <title>Kentour Staff</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
   <!-- Icon Font Css -->
@@ -36,7 +37,9 @@
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+
 
 <!-- Header Start --> 
 <header class="navigation">
@@ -66,7 +69,7 @@
 	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
 		<div class="container">
 		  <a class="navbar-brand" href="#">
-		  	Fortune<span>Health.</span>
+		  	Ken<span>Tour.</span>
 		  </a>
 
 		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,12 +78,10 @@
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
 			<ul class="navbar-nav ml-auto">
-			  	<li class="nav-item active">
-					<a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
-			  	</li>
-			  	<li class="nav-item"><a class="nav-link" href="index.php">Incidents</a></li>
-			  	<li class="nav-item"><a class="nav-link" href="incidents.php">Tasks progress</a></li>
-			   	<li class="nav-item"><a class="nav-link" href="reports.php">Reports</a></li>
+			<li class="nav-item"><a class="nav-link" href="index.php"> <== BACK </a></li>
+			  <li class="nav-item active">
+				<a class="nav-link" href="#"> :::::: <span class="sr-only">(current)</span></a>
+			  </li>
 			</ul>
 		  </div>
 		</div>
@@ -88,71 +89,84 @@
 </header>
 
 <!-- Header Close --> 
+
 <div class="main-wrapper ">
 
-<!--  Section Services Start -->
-<section class="section service border-top">
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-lg-7 text-center">
-				<div class="section-title">Staff  Navigator</span>
-					<h2 class="mt-3 content-title">Easily navigate the dasgboard </h2>
-				</div>
-			</div>
-		</div>
+<section class="section intro">
+<div class="container">
+	<div style="padding: 6px 12px; border: 1px solid #ccc;">
+		<h3>Staff guidelines</h3> 
+		<p> provide some directives for your staff</p>  
+        <?php
+            include('connect-db.php');
+           // include('server.php');
+           $db = mysqli_connect('localhost', 'root', '', 'dkut_ambulance');
+            if (isset($_GET['id']) && is_numeric($_GET['id']))
+            {
+                $taskid = $_GET['id'];
+                $incid = $_GET['memb'];
+                // $stat ="ATTENDED";
 
-		<div class="row justify-content-center">
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="service-item mb-5">
-					<i class="ti-desktop"></i>
-					<a href="index.php" >
-						<h4 class="mb-3">Pending Allocated Tasks.</h4>
-						<p> attend to these task, it might be a matter of emergency :( </p>
-					</a>
-				</div>
-			</div>
+                $sql = "SELECT * FROM task WHERE id='$taskid'";
+                $result = mysqli_query($conn, $sql);
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM)){
+                    // $i =$row[0];
+                    $victim =$row[2];
+                    $directives = $row[4];
+                    $datetim = $row[5];
+                }
+            }
+        ?>
+        <p> <b>Task  ID: </b><?php echo $taskid;?>
+        <p> <b>VICTIM :</b> <?php echo $victim;?>
+            <br>
+            <b><u>Directives:</u></b> <?=$directives?>
 
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="service-item mb-5">
-					<i class="ti-layers"></i>
-					<a href="incidents.php" >
-						<h4 class="mb-3">Completed Tasks.</h4>
-						<p> Click here  to view tasks allocted before and their progress / review from the admin </p>
-					</a>
-				</div>
-			</div>
+            <br>
+        </p>
+        <br>
 
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="service-item mb-5">
-					<i class="ti-pencil-alt"></i>
-					<a href="reports.php" >
-						<h4 class="mb-3">Staff Profile.</h4>
-						<p> View your general profile and statistics of your account </p>
-					</a>
-				</div>
-			</div>
 
-			
-		</div>
-	</div>
+        <div class="container">
+
+            <form method="post" action="makereport.php">
+                <style>
+                    .error {
+                        width: 98%; 
+                        margin: 0px auto; 
+                        padding: 10px; 
+                        border: 1px solid #a94442; 
+                        color: #a94442; 
+                        background: #f2dede; 
+                        border-radius: 5px; 
+                        text-align: left;
+                    }
+                </style>
+                <?php include('errors.php'); ?>
+
+                <div class="form-group">
+                    <textarea type="text" class="form-control" name="remarks" placeholder="Write a brief remark about the situation for admin to review"></textarea>
+                </div>
+
+                <input type="text" style="opacity:0;" name="taskid" value="<?=$taskid?>" readonly>
+
+                <button type="submit" class="btn btn-success" name="makereport" style="width:100%;"><b>PROVIDE INCIDENT REMARKS</b></button>
+                </a>
+
+            </form>
+        </div>
+    </div>
+</div>
 </section>
-<!--  Section Services End -->
 
-<section class="cta-2">
-	<div class="container">
-		<div class="cta-block p-5 rounded">
-			<div class="row justify-content-center align-items-center ">
-				<div class="col-lg-7">
-					<span class="text-color">For Every type business</span>
-					<h2 class="mt-2 text-white">Entrust Your Health to Our Best Team of Professionals</h2>
-				</div>
-				<div class="col-lg-4">
-					<a href="#" class="btn btn-main btn-round-full float-right">Contact Us</a>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
+
+<!-- Section Intro END -->
+<!-- Section About Start -->
+
+
+<!-- Section About End -->
+
+<
 
 <!-- footer Start -->
 <footer class="footer section">
@@ -250,5 +264,4 @@
     <script src="js/script.js"></script>
 
   </body>
-  </html>
-   
+</html>
