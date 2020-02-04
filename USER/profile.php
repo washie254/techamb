@@ -89,96 +89,124 @@
 		</div>
 	</nav>
 </header>
-<script>
-      if(!navigator.geolocation){
-        alert('Your Browser does not support HTML5 Geo Location. Please Use Newer Version Browsers');
-      }
-      navigator.geolocation.getCurrentPosition(success, error);
-      function success(position){
-        var latitude  = position.coords.latitude;	
-        var longitude = position.coords.longitude;	
-        var accuracy  = position.coords.accuracy;
-        document.getElementById("lat").value  = latitude;
-        document.getElementById("lng").value  = longitude;
-        document.getElementById("acc").value  = accuracy;
-      }
-      function error(err){
-        alert('ERROR(' + err.code + '): ' + err.message);
-      }
-    </script>
+
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
 
 <section class="section intro">
+
+<div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
-		<div class="container">
-			<div style="padding: 6px 12px; border: 1px solid #ccc;">
-				<h3>REPORT A SNAKE BITE</h3>
-				<p>Provide the following details pertaining the snake bite incident. kindly observe honesty and describe the 
-				situation as subjectively as possible </p> 
-				</p>  
-			</div>
-		</div>
-		<br>
-		<div class="container">
-			<div style="padding: 6px 12px; border: 1px solid #ccc;" id="addstaff">
-				<h3>Report snake bite</h3> 
-				<p> Kindly fill in the below form as  honestly and explicitly as possible so that we may be able to help you </p>   
-				
-				<form method="post" action="index.php" enctype="multipart/form-data"> 
+		<p>Here is your profile and stats</p> 
+		 
+		</p>  
+	</div>
+</div>
+<br>
+<div class="container" id="activestaff">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
+        <h3>User Information</h3> 
+		<p> The following is your current account information</p> 
+		
+		<table class="table table-stripped">
+                    <thead>
+                        <tr>
+                            <th sope="col">Avatar</th>
+                            <th scope="col">Personal</th>
+                            <th scope="col">About Salon</th>
+                        </tr>
+                    </thead>
+                    <?php
+                        $user = $_SESSION['username'];
+    ;                   $query2 = "SELECT * FROM users WHERE username='$user'";
+                        $result2 = mysqli_query($db, $query2);
+                        while($row = mysqli_fetch_array($result2, MYSQLI_NUM)){
+                            $uid = $row[0];
+                            $names = $row[2]." ".$row[3];
+                            $datecreated =$row[7];
+                            $phone = $row[6];
+                            $email = $row[4];
 
-				<?php
-					$user = $_SESSION["username"];
-				?>
-				<style>
-					.error {
-						width: 98%; 
-						margin: 0px auto; 
-						padding: 10px; 
-						border: 1px solid #a94442; 
-						color: #a94442; 
-						background: #f2dede; 
-						border-radius: 5px; 
-						text-align: left;
-					}
-				</style>
-				<?php 
-				 include('errors.php');
-				?>
-				<div class="form-group">
-                    <label for="image">Image</label>
-                    <input type="file" name="image">
-                </div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Title</label>
-					<input type="text" class="form-control" name="title" placeholder="brief title" required />
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Wound Description</label>
-					<textarea type="tect" class="form-control" name="wdescription" placeholder="describe the wound and how you are feeling" required></textarea>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Snake Description</label>
-					<textarea type="tect" class="form-control" name="sdescription" placeholder="Kindly describe the snake that bit you. color, size etc"></textarea>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Location </label>
-					<input type="text " class="form-control" name="town" placeholder="Classic, Nyeri" />
-				</div>
-				<div class="form-group">
-					<!-- <label for="exampleInputEmail1">confirm password</label> -->
-					<input type="text"  name="user" value="<?=$user?>" style="opacity:0.3;" readonly>
-					<input type="text" id="lat" name="lat" style="opacity: 0.3;"/>
-                    <input type="text" id="lng" name="lng" style="opacity: 0.3;"/>
-				</div>
-				<button type="submit" class="btn btn-success" name="reportinc" style="width:100%;"><b>REPORT INCIDENT</b></button>
+                        }
+                    
+                    ?>
+                    <tr> <td>::<b style="color: #58BA2B;"> PROFILE INFORMATION</b></td> </tr>
+                    <tr>
+                        <td>
+                            <?php 
+                             echo '<img src="images/avatar.png" style="width:150px; height:150px;">';
+                            ?>
 
-				</form>
+                        </td>
+                        <td>
+                            <label class="label">User Id:</label><?php echo $uid; ?><br>
+                            <label class="label">Username :</label> <?php echo $user; ?><br>
+                            <label class="label">Other Names:</label> <?php echo $names; ?><br>
+                        </td>
+                        <td>
+                            <label class="label">TelNo.:</label><?php echo $phone; ?><br>
+                            <label class="label">Email:</label><?php echo $email; ?><br>
+                            <label class="label">Date Created:</label><?php echo $datecreated; ?><br>
+                        
+                        </td>
+                    </tr>
+                </table>
+    </div>
+</div>
 
-			</div>
-		</div>
-  	</div>
+<br>
+<div class="container" id="inactivestaff">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
+        <h3>Statistics</h3> 
+		<p> the following are some of your activities statistics log</p> 
+
+    </div>
+</div>
+
+<br>
+  <!-- <div class="container">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;" id="addstaff">
+        <h3>Assign a New Staff Member</h3> 
+		<p> signup a new staff Member</p>   
+		
+		<form method="post" action="index.php">
+		<style>
+			.error {
+				width: 98%; 
+				margin: 0px auto; 
+				padding: 10px; 
+				border: 1px solid #a94442; 
+				color: #a94442; 
+				background: #f2dede; 
+				border-radius: 5px; 
+				text-align: left;
+			}
+		</style>
+          <?php include('errors.php'); ?>
+       
+		  <div class="form-group">
+              <label for="exampleInputEmail1">Username</label>
+              <input type="text" class="form-control" name="username" placeholder="Enter username" ></textarea>
+		  </div>
+		  <div class="form-group">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="email" class="form-control" name="email" placeholder="Enter Email" ></textarea>
+		  </div>
+		  <div class="form-group">
+              <label for="exampleInputEmail1">password</label>
+              <input type="password" class="form-control" name="password_1" placeholder="Enter password" ></textarea>
+		  </div>
+		  <div class="form-group">
+              <label for="exampleInputEmail1">confirm password</label>
+              <input type="password" class="form-control" name="password_2" placeholder="confirm password" ></textarea>
+		  </div>
+		  <button type="submit" class="btn btn-success" name="add_staff" style="width:100%;"><b>ADD STAFF</b></button>
+
+		</form>
+
+      </div>
+  </div> -->
 </section>
 
 

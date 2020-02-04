@@ -89,96 +89,111 @@
 		</div>
 	</nav>
 </header>
-<script>
-      if(!navigator.geolocation){
-        alert('Your Browser does not support HTML5 Geo Location. Please Use Newer Version Browsers');
-      }
-      navigator.geolocation.getCurrentPosition(success, error);
-      function success(position){
-        var latitude  = position.coords.latitude;	
-        var longitude = position.coords.longitude;	
-        var accuracy  = position.coords.accuracy;
-        document.getElementById("lat").value  = latitude;
-        document.getElementById("lng").value  = longitude;
-        document.getElementById("acc").value  = accuracy;
-      }
-      function error(err){
-        alert('ERROR(' + err.code + '): ' + err.message);
-      }
-    </script>
+
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
 
 <section class="section intro">
+
+<div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
-		<div class="container">
-			<div style="padding: 6px 12px; border: 1px solid #ccc;">
-				<h3>REPORT A SNAKE BITE</h3>
-				<p>Provide the following details pertaining the snake bite incident. kindly observe honesty and describe the 
-				situation as subjectively as possible </p> 
-				</p>  
-			</div>
-		</div>
-		<br>
-		<div class="container">
-			<div style="padding: 6px 12px; border: 1px solid #ccc;" id="addstaff">
-				<h3>Report snake bite</h3> 
-				<p> Kindly fill in the below form as  honestly and explicitly as possible so that we may be able to help you </p>   
-				
-				<form method="post" action="index.php" enctype="multipart/form-data"> 
-
+		<h3>QUICK LINKS</h3>
+		<p>some quick links for the page</p> 
+		<p><a href="#activestaff"><button class="btn btn-success">Reported Incidents</button></a> 
+		<a href="#inactivestaff"><button class="btn btn-success">Remarks</button></a>
+		 
+		</p>  
+	</div>
+</div>
+<br>
+<div class="container" id="activestaff">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
+        <h3>Reported incidents </h3> 
+		<p> the following are the incidents that you have reported:</p> 
+		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th scope="col">Id</th>
+				<th scope="col">Image</th>
+				<th scope="col">Description</th>
+				<th scope="col">Snake Desciption</th>
+				<th scope="col">Location</th>
+				<th scope="col">Status</th>
+				<th scope="col">Date Time</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
-					$user = $_SESSION["username"];
+				 require('connect-db.php');
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM incidents WHERE user='$user'";
+				$result = mysqli_query($conn, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+				
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
+						echo '<td>'.$row[0].'</td> '; //TASK ID 
+						echo '<td><img src="evidence/'.$row[2].'" style="width:120px;height:80px;"</td> '; //USERNAME
+						echo '<td>'.$row[3].'<br>'.$row[4].'</td> '; //EMAIL
+						echo '<td>'.$row[5].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'<br>'.$row[9].'</td> '; //STATUSD
+						echo '<td>'.$row[11].'</td> '; //STATUSD
+						echo '<td>'.$row[10].'</td> '; //STATUSD
+						
+					echo '</tr>';
+				}
 				?>
-				<style>
-					.error {
-						width: 98%; 
-						margin: 0px auto; 
-						padding: 10px; 
-						border: 1px solid #a94442; 
-						color: #a94442; 
-						background: #f2dede; 
-						border-radius: 5px; 
-						text-align: left;
-					}
-				</style>
-				<?php 
-				 include('errors.php');
+			</tbody>
+		</table>
+    </div>
+</div>
+
+<br>
+<div class="container" id="inactivestaff">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
+        <h3>Remarks From the Specialist</h3> 
+		<p> The following are the remarks from the specialist</p> 
+		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th scope="col">S.Id</th>
+				<th scope="col">Username</th>
+				<th scope="col">Email</th>
+				<th scope="col">Date Added</th>
+				<th scope="col">Status</th>
+				<th scope="col">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- [ LOOP THE REGISTERED AGENTS ] -->
+				<?php
+				 require('connect-db.php');
+
+				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
+				$result = mysqli_query($conn, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+				
+					echo '<tr>';
+						echo '<td>'.$row[0].'</td> '; //TASK ID 
+						echo '<td>'.$row[1].'</td> '; //USERNAME
+						echo '<td>'.$row[2].'</td> '; //EMAIL
+						echo '<td>'.$row[4].'</td> '; //DATEADDED
+						echo '<td>'.$row[5].'</td> '; //STATUSD
+						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+					echo '</tr>';
+				}
 				?>
-				<div class="form-group">
-                    <label for="image">Image</label>
-                    <input type="file" name="image">
-                </div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Title</label>
-					<input type="text" class="form-control" name="title" placeholder="brief title" required />
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Wound Description</label>
-					<textarea type="tect" class="form-control" name="wdescription" placeholder="describe the wound and how you are feeling" required></textarea>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Snake Description</label>
-					<textarea type="tect" class="form-control" name="sdescription" placeholder="Kindly describe the snake that bit you. color, size etc"></textarea>
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Location </label>
-					<input type="text " class="form-control" name="town" placeholder="Classic, Nyeri" />
-				</div>
-				<div class="form-group">
-					<!-- <label for="exampleInputEmail1">confirm password</label> -->
-					<input type="text"  name="user" value="<?=$user?>" style="opacity:0.3;" readonly>
-					<input type="text" id="lat" name="lat" style="opacity: 0.3;"/>
-                    <input type="text" id="lng" name="lng" style="opacity: 0.3;"/>
-				</div>
-				<button type="submit" class="btn btn-success" name="reportinc" style="width:100%;"><b>REPORT INCIDENT</b></button>
+			</tbody>
+		</table>
+    </div>
+</div>
 
-				</form>
-
-			</div>
-		</div>
-  	</div>
 </section>
 
 

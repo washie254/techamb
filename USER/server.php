@@ -82,6 +82,38 @@
 		}
 	}
 
+	//REPORT SNAKE BITE
+	if (isset($_POST['reportinc'])) {
+
+        $image = $_FILES['image']['name']; //receive image from a form
+		$title = mysqli_real_escape_string($db, $_POST['title']);
+		$wdescription = mysqli_real_escape_string($db, $_POST['wdescription']);
+		$sdescription = mysqli_real_escape_string($db, $_POST['sdescription']);
+		$town = mysqli_real_escape_string($db, $_POST['town']);
+		$lat = mysqli_real_escape_string($db, $_POST['lat']);
+		$lng = mysqli_real_escape_string($db, $_POST['lng']);
+		$status = 'PENDING';
+		$user = mysqli_real_escape_string($db, $_POST['user']);
+
+		$latlng = $lat.", ".$lng;
+
+		if (empty($image)) { array_push($errors, "Image required"); }
+	   
+		$target = "evidence/".basename($image); // name of the folder where the images will be saved
+
+        if (count($errors) == 0) {
+			$sql = "INSERT INTO incidents (user, image, title, wdescription, sdescription, town, lat, lng, latlng, status ) 
+								VALUES ('$user', '$image', '$title', '$wdescription', '$sdescription', '$town', '$lat', '$lng', '$latlng', '$status')";
+			if(mysqli_query($db, $sql)){
+			    header('location: incidents.php');
+			}
+			if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
+			    $msg = "Image uploaded successfully";
+			}else{
+			    $msg = "Failed to upload image"; //or just push it as an error
+			}
+		}
+    }
 
 	
 ?>

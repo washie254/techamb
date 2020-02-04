@@ -23,7 +23,7 @@
   
   <meta name="author" content="themefisher.com">
 
-  <title>Fortune Health STAFF</title>
+  <title>Fortune Health</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
   <!-- Icon Font Css -->
@@ -78,10 +78,9 @@
 			  	<li class="nav-item active">
 					<a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
 			  	</li>
-			  	<li class="nav-item"><a class="nav-link" href="index.php">Staff</a></li>
+			  	<li class="nav-item"><a class="nav-link" href="index.php">Report</a></li>
 			  	<li class="nav-item"><a class="nav-link" href="incidents.php">Incidents</a></li>
-			   	<li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
-			   	<li class="nav-item"><a class="nav-link" href="loans.php">Reports</a></li>
+			   	<li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
 			</ul>
 		  </div>
 		</div>
