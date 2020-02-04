@@ -100,18 +100,19 @@
 <div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
 		<h3>QUICK LINKS</h3>
-		<p>categories of the reported incidednts of snake bites</p> 
-		<p> <a href="#pending"><button class="btn btn-success">Pending Incidents</button></a> 
-            <a href="#ongoing"><button class="btn btn-success">Allocated incidents</button></a>
-            <a href="#completed"><button class="btn btn-success">Completed Iincidents</button></a>
+		<p>some quick links for the page</p> 
+		<p><a href="#activestaff"><button class="btn btn-success">Active Staff</button></a> 
+		<a href="#inactivestaff"><button class="btn btn-success">Inactive Staff</button></a>
+		<a href="#addstaff"><button class="btn btn-success">Add new Staff</button></a>
+		 
 		</p>  
 	</div>
 </div>
 <br>
-<div class="container" id="pending">
+<div class="container" id="activestaff">
     <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>Pending Incidents</h3> 
-		<p> the following are the pending reported incidents </p> 
+        <h3>Active Staff Members</h3> 
+		<p> the following are the surrently active staff mambers:</p> 
 		
 		<table class="table table-bordered">
 			<thead>
@@ -152,10 +153,10 @@
 </div>
 
 <br>
-<div class="container" id="ongoing">
+<div class="container" id="inactivestaff">
     <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>Allocated incidents</h3> 
-		<p> the following are incidents allocated to staff and their progress status </p> 
+        <h3>INNACTIVE Staff Members</h3> 
+		<p> the following are the surrently Innactive staff mambers:</p> 
 		
 		<table class="table table-bordered">
 			<thead>
@@ -195,43 +196,45 @@
 
 <br>
   <div class="container">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;" id="completed">
-        <h3>Completed Incidents</h3> 
-		<p> the following are the completed incidents </p>   
+    <div style="padding: 6px 12px; border: 1px solid #ccc;" id="addstaff">
+        <h3>Assign a New Staff Member</h3> 
+		<p> signup a new staff Member</p>   
 		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">S.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Date Added</th>
-				<th scope="col">Status</th>
-				<th scope="col">Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
+		<form method="post" action="index.php">
+		<style>
+			.error {
+				width: 98%; 
+				margin: 0px auto; 
+				padding: 10px; 
+				border: 1px solid #a94442; 
+				color: #a94442; 
+				background: #f2dede; 
+				border-radius: 5px; 
+				text-align: left;
+			}
+		</style>
+          <?php include('errors.php'); ?>
+       
+		  <div class="form-group">
+              <label for="exampleInputEmail1">Username</label>
+              <input type="text" class="form-control" name="username" placeholder="Enter username" ></textarea>
+		  </div>
+		  <div class="form-group">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="email" class="form-control" name="email" placeholder="Enter Email" ></textarea>
+		  </div>
+		  <div class="form-group">
+              <label for="exampleInputEmail1">password</label>
+              <input type="password" class="form-control" name="password_1" placeholder="Enter password" ></textarea>
+		  </div>
+		  <div class="form-group">
+              <label for="exampleInputEmail1">confirm password</label>
+              <input type="password" class="form-control" name="password_2" placeholder="confirm password" ></textarea>
+		  </div>
+		  <button type="submit" class="btn btn-success" name="add_staff" style="width:100%;"><b>ADD STAFF</b></button>
 
-				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
-				$result = mysqli_query($conn, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASK ID 
-						echo '<td>'.$row[1].'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[4].'</td> '; //DATEADDED
-						echo '<td>'.$row[5].'</td> '; //STATUSD
-						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
+		</form>
+
       </div>
   </div>
 </section>
