@@ -171,6 +171,26 @@
 
 	}
 
+	//adminadv
+	if (isset($_POST['adminadv'])) {
+		$incid = mysqli_real_escape_string($db, $_POST['incid']);
+		$feedback = mysqli_real_escape_string($db, $_POST['Feedback']);
+		$status = 'COMPLETED';
+
+		if (empty($feedback)) { array_push($errors, "Provide some remarsks for the patient to follow up on"); }
+		if (empty($incid)) { array_push($errors, "could not resolve incident id"); }
+
+	
+		if (count($errors) == 0) {
+			$query = "UPDATE incidents SET status='$status', adminadvice='$feedback' WHERE id='$incid'";
+			if(mysqli_query($db, $query)){
+
+				header('location: incidents.php');
+
+			}
+		}
+
+	}
 
 
 ?>
