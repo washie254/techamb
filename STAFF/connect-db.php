@@ -1,9 +1,9 @@
 <?php
 // server info
 $server = 'localhost';
-$user = 'africand_muchemi';
-$pass = 'Muchemi254';
-$db = 'africand_kentour';
+$user = 'root';
+$pass = '';
+$db = 'dkut_ambulance';
 
 // connect to the database
 $mysqli = new mysqli($server, $user, $pass, $db);

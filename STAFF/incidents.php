@@ -13,18 +13,21 @@
 		header("location: login.php");
 	}
 
+	$pen = 'PENDING';
+	$aloc = 'ALLOCATED';
+	$picfolder ='../USER/evidence/';
 ?>
 <!doctype html>
 <html lang="en">
-  <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <head>
   <!-- Required meta tags -->
-  
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="megakit,business,company,agency,multipurpose,modern,bootstrap4">
   
   <meta name="author" content="themefisher.com">
 
-  <title>Kentour Staff</title>
+  <title>Fortune Admin</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
   <!-- Icon Font Css -->
@@ -59,8 +62,8 @@
 				</div>
 				<div class="col-lg-10 col-md-8 text-center text-lg-right text-md-right">
 					<div class="header-top-info">
-						<a href="tel:+254720870388">Call Us : <span>+254-720-111111</span></a>
-						<a href="mailto:kentour@mail.com" ><i class="fa fa-envelope mr-2"></i><span>kentour@mail.com</span></a>
+						<a href="tel:+254720870388">Call Us : <span>+254-790-108689</span></a>
+						<a href="mailto:Fortune Health@mail.com" ><i class="fa fa-envelope mr-2"></i><span>FortuneHealth@mail.com</span></a>
 					</div>
 				</div>
 			</div>
@@ -69,7 +72,7 @@
 	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
 		<div class="container">
 		  <a class="navbar-brand" href="#">
-		  	Ken<span>Tour.</span>
+		  	Fortune<span>Health.</span>
 		  </a>
 
 		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,55 +80,147 @@
 		  </button>
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
-		  	<ul class="navbar-nav ml-auto">
-			  <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
-			  <li class="nav-item active">
-				<a class="nav-link" href="index.php">Loans <span class="sr-only">(current)</span></a>
-			  </li>
-			  <li class="nav-item"><a class="nav-link" href="loanpayments.php">Loan Payments</a></li>
-			   <li class="nav-item"><a class="nav-link" href="accounts.php">Account Requests</a></li>
-               <li class="nav-item"><a class="nav-link" href="accountpayments.php">Account Payments</a></li>
-               <li class="nav-item"><a class="nav-link" href="lands.php">Lands</a></li>
-			   <li class="nav-item"><a class="nav-link" href="landapps.php">Land applications</a></li>
-			   <li class="nav-item"><a class="nav-link" href="landpayments.php">Land Payments</a></li>
-			   <li class="nav-item"><a class="nav-link" href="members.php">Members</a></li>
-			   
+			<ul class="navbar-nav ml-auto">
+			  	<li class="nav-item active">
+					<a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
+			  	</li>
+			  	<li class="nav-item"><a class="nav-link" href="index.php">Incidents</a></li>
+			  	<li class="nav-item"><a class="nav-link" href="incidents.php">Tasks progress</a></li>
+			   	<li class="nav-item"><a class="nav-link" href="reports.php">Reports</a></li>
 			</ul>
 		  </div>
 		</div>
 	</nav>
 </header>
-
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
 
 <section class="section intro">
+
 <div class="container">
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
-		<h3>STAFF DASHBOARD FOR APPROVING ACCOUNTS</h3> 
-		<p> You can activalte accounts here</p>  
-		Quick Links: 
-		<a href="#qualified"><button type="button" class="btn btn-outline-secondary">Qualified Accounts</button></a>
-		<a href="#others"><button type="button" class="btn btn-outline-secondary">Other Accounts</button></a>
+		<h3>QUICK LINKS</h3>
+		<p>categories of the reported incidednts of snake bites</p> 
+		<p> <a href="#pending"><button class="btn btn-success">Pending Incidents</button></a> 
+            <a href="#ongoing"><button class="btn btn-success">Allocated incidents</button></a>
+            <a href="#completed"><button class="btn btn-success">Completed Iincidents</button></a>
+		</p>  
 	</div>
 </div>
-
-<BR>
-<div class="container" id="qualified">
+<br>
+<div class="container" id="pending">
     <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>Qualified Accounts</h3> 
-		<p> the following are member requests who's guarantors have confirmed and are just awaiting accountactivation</p> 
+        <h3>Pending Incidents</h3> 
+		<p> the following are the pending reported incidents </p> 
 		
-		<table class="table table-bordered table-striped">
+		<table class="table table-bordered">
 			<thead>
 				<tr>
-				<th scope="col">A.Id</th>
+				<th scope="col">Id</th>
+				<th scope="col">User</th>
+				<th scope="col">Image</th>
+				<th scope="col">Description</th>
+				<th scope="col">Snake Desciption</th>
+				<th scope="col">Location</th>
+				<th scope="col">Status</th>
+				<th scope="col">Date Time</th>
+				<th scope="col">Action </th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- [ LOOP THE REGISTERED AGENTS ] -->
+				<?php
+				 require('connect-db.php');
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM incidents WHERE status='$pen' ";
+				$result = mysqli_query($conn, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+				
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
+						echo '<td>'.$row[0].'</td> '; //TASK ID 
+						echo '<td>'.$row[1].'</td> '; //TASK ID 
+						echo '<td><img src="'.$picfolder.$row[2].'" style="width:120px;height:80px;"/></td> '; //USERNAME
+						echo '<td>'.$row[3].'<br>'.$row[4].'</td> '; //EMAIL
+						echo '<td>'.$row[5].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'<br>'.$row[9].'</td> '; //STATUSD
+						echo '<td>'.$row[11].'</td> '; //STATUSD
+						echo '<td>'.$row[10].'</td> '; //STATUSD
+						echo '<td>
+								<a href="allocatestaff.php?id='.$row[0].'&memb='.$row[1].'"><strong><button type="button" class="btn btn-success">Allocate Staff</button></a> 
+								<a href="advice.php?id='.$row[0].'&memb='.$row[4].'"><strong><button type="button" class="btn btn-primary">Provide Advice</button></a>
+							 </td>';
+						
+					echo '</tr>';
+				}
+				?>
+			</tbody>
+		</table>
+    </div>
+</div>
+
+<br>
+<div class="container" id="ongoing">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
+        <h3>Allocated incidents</h3> 
+		<p> the following are incidents allocated to staff and their progress status </p> 
+		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th scope="col">Id</th>
+				<th scope="col">Incident Id</th>
+				<th scope="col">User</th>
+				<th scope="col">Staff Allocated</th>
+				<th scope="col">Staff Directives</th>
+				<th scope="col">Status</th>
+				<th scope="col">Date Time</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- [ LOOP THE REGISTERED AGENTS ] -->
+				<?php
+				// require('connect-db.php');
+                $user = $_SESSION["username"];
+				$sql = "SELECT * FROM task";
+				$result = mysqli_query($conn, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+				
+                    echo '<tr>';
+                        //Id	Image	Description	Snake Desciption	Location	Status	Date Time
+						echo '<td>'.$row[0].'</td> '; //TASK ID 
+						echo '<td>'.$row[1].'</td> '; //TASK ID
+						echo '<td>'.$row[2].'</td> '; //TASK ID 
+						echo '<td>'.$row[3].'</td> '; //DATEADDED
+						echo '<td>'.$row[4].'</td> '; //DATEADDED
+						echo '<td>'.$row[6].'</td> '; //STATUSD
+						echo '<td>'.$row[5].'</td> '; //STATUSD
+						
+					echo '</tr>';
+				}
+				?>
+			</tbody>
+		</table>
+    </div>
+</div>
+
+<br>
+  <div class="container">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;" id="completed">
+        <h3>Completed Incidents</h3> 
+		<p> the following are the completed incidents </p>   
+		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th scope="col">S.Id</th>
 				<th scope="col">Username</th>
 				<th scope="col">Email</th>
-				<th scope="col">Tel</th>
-				<th scope="col">Account Status</th>
-				<th scope="col">Accont Balance</th>
+				<th scope="col">Date Added</th>
+				<th scope="col">Status</th>
 				<th scope="col">Action</th>
 				</tr>
 			</thead>
@@ -134,96 +229,26 @@
 				<?php
 				 require('connect-db.php');
 
-
-				$sql = "SELECT * FROM members WHERE g1status='APPROVED' AND g2status='APPROVED' AND accountStatus='INNACTIVE'  ";
-				$result = mysqli_query($conn, $sql);
-			
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-					$uname=$row[1];
-					$bal = $mysqli->query("SELECT balance FROM accountpayment WHERE username='$uname'")->fetch_object()->balance;  
-					// $sql0 = "SELECT * FROM accountpayment WHERE username='$uname'";
-					// $result0 = mysqli_query($conn, $sql0);
-					// while($rows = mysqli_fetch_array($result0, MYSQLI_NUM)){
-					// 	$acbal =$rows[5];
-					// }
-
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //ACCOUNT ID 
-						echo '<td>'.$uname.'</td> '; //USERNAME
-						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[3].'</td> '; //TEL
-						echo '<td>'.$row[9].'</td> '; //ACCOUNT STATUS
-						echo '<td>';
-						echo $bal;
-						echo '</td>';
-						echo '<td><a href="approveAccount.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> 
-								<a href="rejectaccount.php?id=' . $row[0] . '"><button class="btn btn-danger">REJECT</button></a>
-						
-						</td>';
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-		</table>
-    </div>
-</div>	
-
-<BR>
-<div class="container" id="others">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
-        <h3>OTHER REQUESTS</h3> 
-		<p> the following are member requests who's guarantors have confirmed and are just awaiting accountactivation</p> 
-		
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-				<th scope="col">A.Id</th>
-				<th scope="col">Username</th>
-				<th scope="col">Email</th>
-				<th scope="col">Tel</th>
-				<th scope="col">G1 & STATUS</th>
-				<th scope="col">G2 & STATUS</th>
-				<th scope="col">Account Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				 require('connect-db.php');
-
-				$sql = "SELECT * FROM members WHERE accountStatus='INNACTIVE'  ";
+				$sql = "SELECT * FROM staff WHERE status='INNACTIVE'";
 				$result = mysqli_query($conn, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				
 					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //ACCOUNT ID 
+						echo '<td>'.$row[0].'</td> '; //TASK ID 
 						echo '<td>'.$row[1].'</td> '; //USERNAME
 						echo '<td>'.$row[2].'</td> '; //EMAIL
-						echo '<td>'.$row[3].'</td> '; //TEL
-						echo '<td>'.$row[5].' :=>'.$row[6].'</td> '; //G1 $ STATUS
-						echo '<td>'.$row[7].' :=>'.$row[8].'</td> '; //G1 $ STATUS
-						echo '<td>'.$row[9].'</td> '; //ACCOUNT STATUS
-						// echo '<td><a href="approve.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+						echo '<td>'.$row[4].'</td> '; //DATEADDED
+						echo '<td>'.$row[5].'</td> '; //STATUSD
+						echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
 					echo '</tr>';
 				}
 				?>
 			</tbody>
 		</table>
-    </div>
-</div>
-  
+      </div>
+  </div>
 </section>
-
-
-<!-- Section Intro END -->
-<!-- Section About Start -->
-
-
-<!-- Section About End -->
-
-<
 
 <!-- footer Start -->
 <footer class="footer section">
@@ -231,7 +256,7 @@
 		<div class="row">
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="widget">
-					<h4 class="text-capitalize mb-4">Kentour Company</h4>
+					<h4 class="text-capitalize mb-4">Fortune Health Company</h4>
 
 					<ul class="list-unstyled footer-menu lh-35">
 						<li><a href="#">Terms & Conditions</a></li>
@@ -254,7 +279,7 @@
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="widget">
 					<h4 class="text-capitalize mb-4">Subscribe Us</h4>
-					<p>Subscribe to the Kentour  </p>
+					<p>Subscribe to the Fortune Health  </p>
 
 					<form action="#" class="sub-form">
 						<input type="text" class="form-control mb-3" placeholder="Subscribe Now ...">
@@ -266,10 +291,10 @@
 			<div class="col-lg-3 ml-auto col-sm-6">
 				<div class="widget">
 					<div class="logo mb-4">
-						<h3>ken<span>Tour.</span></h3>
+						<h3>Fortune<span>Health.</span></h3>
 					</div>
-					<h6><a href="tel:+254-720-870388" >+254-718-610999</a></h6>
-					<a href="mailto:kentour@yahoo.com"><span class="text-color h4">kentour@yahoo.com</span></a>
+					<h6><a href="tel:+254-790-108689" >+254-790-108689</a></h6>
+					<a href="mailto:Fortune Health@yahoo.com"><span class="text-color h4">Fortunehealth@yahoo.com</span></a>
 				</div>
 			</div>
 		</div>
@@ -278,7 +303,7 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="copyright">
-						&copy; Copyright Reserved to <span class="text-color">Kentour.</span> by <a href="#">Muchemi</a>
+						&copy; Copyright Reserved to <span class="text-color">Fortune Health.</span> by <a href="#">Fortune</a>
 					</div>
 				</div>
 				<div class="col-lg-6 text-left text-lg-right">

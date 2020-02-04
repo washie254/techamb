@@ -11,7 +11,7 @@ $id = $_GET['id'];
 $stat ="ACTIVE";
 
 // delete record from database
-if ($stmt = $mysqli->prepare("UPDATE members SET accountStatus='$stat' WHERE id= ? LIMIT 1"))
+if ($stmt = $mysqli->prepare("UPDATE staff SET status='$stat' WHERE id= ? LIMIT 1"))
 {
 $stmt->bind_param("i",$id);
 $stmt->execute();
@@ -23,11 +23,11 @@ else {
 }
 $mysqli->close();
 // redirect user after delete is successful
-header("Location:accounts.php");
+header("Location:index.php");
 }
 else
 // if the 'id' variable isn't set, redirect the user
 {
-header("Location: accounts.php");
+header("Location:index.php");
 }
 ?>
